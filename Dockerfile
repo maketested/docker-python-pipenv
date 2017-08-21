@@ -5,15 +5,20 @@ RUN apk --update add ca-certificates wget && \
 
 # Tooling
 
-RUN apk --update add make
+RUN apk add make gcc
+RUN apk add musl-dev linux-headers
 
-# pipenv
+# Pipenv
 
 RUN pip install pipenv~=5.1.1
 
+# PostgreSQL
+
+RUN apk add postgresql-dev
+
 # Firefox
 
-RUN apk --update --no-cache add firefox-esr && \
+RUN apk --no-cache add firefox-esr && \
     rm -rf /tmp/* /var/cache/apk/*
 
 RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz && \
