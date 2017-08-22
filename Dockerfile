@@ -6,7 +6,7 @@ RUN apk --update add ca-certificates wget && \
 # Tooling
 
 RUN apk add make gcc
-RUN apk add musl-dev linux-headers
+RUN apk add musl-dev linux-headers libxml2-dev libxslt-dev
 
 # Pipenv
 
