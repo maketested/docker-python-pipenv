@@ -1,30 +1,20 @@
-FROM python:3.6.1-alpine
-
-RUN apk --update add ca-certificates wget && \
-    update-ca-certificates
-
-# Tooling
-
-RUN apk add make gcc
-RUN apk add musl-dev linux-headers libxml2-dev libxslt-dev
+FROM circleci/python:3.6.3-stretch-browsers
 
 # Pipenv
 
-RUN pip install pipenv~=5.1.1 && \
-    pipenv --version
-
-# PostgreSQL
-
-RUN apk add postgresql-dev
+RUN sudo pip install pipenv==8.3.2 && \
+pipenv --version
 
 # Firefox
 
-RUN apk --update --no-cache add firefox && \
-    rm -rf /tmp/* /var/cache/apk/* && \
-    firefox --version
+RUN sudo wget https://ftp.mozilla.org/pub/firefox/releases/55.0/linux-x86_64/en-US/firefox-55.0.tar.bz2 && \
+sudo tar -xjf firefox-55.0.tar.bz2 && \
+sudo rm -rf /opt/firefox* && \
+sudo rm firefox-55.0.tar.bz2 && \
+sudo mv firefox /opt/firefox55 && \
+sudo ln -sf /opt/firefox55/firefox-bin /usr/bin/firefox && \
+firefox --version
 
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz && \
-    tar -xvzf geckodriver-v0.17.0-linux64.tar.gz && \
-    chmod +x geckodriver && \
-    cp geckodriver /usr/local/bin/ && \
-    geckodriver --version
+RUN curl -L https://github.com/mozilla/geckodriver/releases/download/v0.19.0/geckodriver-v0.19.0-linux64.tar.gz \
+| sudo tar xz -C /usr/local/bin && \
+geckodriver --version
